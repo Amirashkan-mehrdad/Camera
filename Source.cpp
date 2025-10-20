@@ -73,7 +73,7 @@ int main(int argc, char* argv[])
 	sf::Sprite cosmos(BackgroundImage);
 
 	// draw the player
-	player spaceShip(Vec2(100, 100), 10, 10);
+	player spaceShip(Vec2(100, 100), 5, 10);
 
 
 
@@ -133,6 +133,7 @@ int main(int argc, char* argv[])
 		if (spaceShip.up)
 		{
 			spaceShip.position.y -= spaceShip.Velocity;
+			std::cout << spaceShip.position.y << std::endl;
 		}
 
 		if (spaceShip.down)
@@ -149,6 +150,8 @@ int main(int argc, char* argv[])
 		{
 			spaceShip.position.x -= spaceShip.Velocity;
 		}
+
+		spaceShip.s.setPosition(spaceShip.position.x, spaceShip.position.y);
 
 		//std::cout << blocks.size() << std::endl;
 
