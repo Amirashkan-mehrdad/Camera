@@ -75,8 +75,18 @@ int main(int argc, char* argv[])
 	// draw the player
 	player spaceShip(Vec2(100, 100), 5, 10);
 
-	// define a camera
+	// define and naming different cameras
 	sf::View camera1;
+	sf::View camera2;
+
+	// define a rectangle box for a box/trap camera
+	sf::RectangleShape CameraBox;
+	CameraBox.setSize(sf::Vector2f(120, 60));
+	CameraBox.setOutlineColor(sf::Color::White);
+	CameraBox.setOutlineThickness(2.0);
+	CameraBox.setFillColor(sf::Color::Transparent);
+	CameraBox.setOrigin(60, 30);
+	CameraBox.setPosition(spaceShip.position.x, spaceShip.position.y);
 
 	while (window.isOpen())
 	{
@@ -133,7 +143,7 @@ int main(int argc, char* argv[])
 		if (spaceShip.up)
 		{
 			spaceShip.position.y -= spaceShip.Velocity;
-			std::cout << spaceShip.position.y << std::endl;
+			//std::cout << spaceShip.position.y << std::endl;
 		}
 
 		if (spaceShip.down)
@@ -157,11 +167,33 @@ int main(int argc, char* argv[])
 
 		window.clear();
 
-		// define a position lock camera
-		camera1.reset(sf::FloatRect(spaceShip.position.x - 200, spaceShip.position.y - 100, 400, 200));
-		window.setView(camera1);
+		// implement a position lock camera
+		//camera1.reset(sf::FloatRect(spaceShip.position.x - 200, spaceShip.position.y - 100, 400, 200));
+		//window.setView(camera1);
+
+		// check if the player is within the box, if not the box should be pushed
+		if (CameraBox.getPosition().x + CameraBox.getSize().x / 2 < spaceShip.position.x + spaceShip.s.getRadius())
+		{
+			CameraBox.setPosition(spaceShip.position.x + spaceShip.s.getRadius() - CameraBox.getSize().x / 2, CameraBox.getPosition().y);
+		}
+		if (CameraBox.getPosition().x - CameraBox.getSize().x / 2 > spaceShip.position.x - spaceShip.s.getRadius())
+		{
+			CameraBox.setPosition(spaceShip.position.x - spaceShip.s.getRadius() + CameraBox.getSize().x / 2, CameraBox.getPosition().y);
+		}
+		if (CameraBox.getPosition().y + CameraBox.getSize().y / 2 < spaceShip.position.y + spaceShip.s.getRadius())
+		{
+			CameraBox.setPosition(CameraBox.getPosition().x, spaceShip.position.y + spaceShip.s.getRadius() - CameraBox.getSize().y / 2);
+		}
+		if (CameraBox.getPosition().y - CameraBox.getSize().y / 2 > spaceShip.position.y - spaceShip.s.getRadius())
+		{
+			CameraBox.setPosition(CameraBox.getPosition().x, spaceShip.position.y - spaceShip.s.getRadius() + CameraBox.getSize().y / 2);
+		}
+		// implement a box/trap camera
+		camera2.reset(sf::FloatRect(CameraBox.getPosition().x - 200, CameraBox.getPosition().y - 100, 400, 200));
+		window.setView(camera2);
 		
 		window.draw(cosmos);
+		window.draw(CameraBox);
 		window.draw(spaceShip.s);
 		window.display();
 	}
