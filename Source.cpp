@@ -61,8 +61,8 @@ public:
 int main(int argc, char* argv[])
 {
 	// draw a window
-	const int wWidth = 800;
-	const int wHight = 700;
+	const int wWidth = 400;
+	const int wHight = 200;
 	sf::RenderWindow window(sf::VideoMode(wWidth, wHight), "SFML works!");
 	window.setFramerateLimit(60);
 
@@ -75,8 +75,8 @@ int main(int argc, char* argv[])
 	// draw the player
 	player spaceShip(Vec2(100, 100), 5, 10);
 
-
-
+	// define a camera
+	sf::View camera1;
 
 	while (window.isOpen())
 	{
@@ -157,10 +157,11 @@ int main(int argc, char* argv[])
 
 		window.clear();
 
+		// define a position lock camera
+		camera1.reset(sf::FloatRect(spaceShip.position.x - 200, spaceShip.position.y - 100, 400, 200));
+		window.setView(camera1);
+		
 		window.draw(cosmos);
-
-
-
 		window.draw(spaceShip.s);
 		window.display();
 	}
